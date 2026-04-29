@@ -114,7 +114,7 @@ export default function FooterSection() {
           </div>
         </div>
       </div>
-       {/* HOLAAAAAAAAAAAAAAAAA*/}
+       {/* patrick}
     </footer>
   );
 }
