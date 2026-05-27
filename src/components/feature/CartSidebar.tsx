@@ -9,6 +9,7 @@ interface CartSidebarProps {
   onUpdateQuantity: (id: number, qty: number) => void;
   onRemove: (id: number) => void;
   onClear: () => void;
+  onCheckout: () => void;
 }
 
 export default function CartSidebar({
@@ -19,6 +20,7 @@ export default function CartSidebar({
   onUpdateQuantity,
   onRemove,
   onClear,
+  onCheckout,
 }: CartSidebarProps) {
   useEffect(() => {
     if (isOpen) {
@@ -128,7 +130,11 @@ export default function CartSidebar({
               <span className="text-stone-500 text-sm">Subtotal</span>
               <span className="font-bold text-stone-900 text-lg">S/ {total.toFixed(2)}</span>
             </div>
-            <button className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3.5 rounded-full transition-colors cursor-pointer whitespace-nowrap text-sm">
+            <button
+              onClick={onCheckout}
+              className="w-full bg-amber-800 hover:bg-amber-900 text-white font-medium py-3.5 rounded-full transition-colors cursor-pointer whitespace-nowrap text-sm flex items-center justify-center gap-2"
+            >
+              <i className="ri-secure-payment-line text-base" />
               Proceder al pago
             </button>
             <button
