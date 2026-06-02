@@ -86,3 +86,4 @@ Si ocurre un conflicto, se debe:
 
 5\. Hacer commit de la solución.
 
+Última actualización: Junio 2026
