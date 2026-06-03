@@ -1,4 +1,8 @@
-export default function CtaSection() {
+interface CtaSectionProps {
+  onEncargo: () => void;
+}
+
+export default function CtaSection({ onEncargo }: CtaSectionProps) {
   return (
     <section className="py-0 overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
@@ -37,13 +41,13 @@ export default function CtaSection() {
           <p className="text-stone-500 text-sm leading-relaxed mb-10 max-w-sm">
             Bodas, quinceañeras, cumpleaños o eventos corporativos. Trabajamos contigo para crear una pieza única que refleje tu visión y sorprenda a todos tus invitados.
           </p>
-          <a
-            href="#contacto"
+          <button
+            onClick={onEncargo}
             className="inline-flex items-center gap-2 bg-amber-800 hover:bg-amber-900 text-white text-sm font-medium px-8 py-4 rounded-full transition-all cursor-pointer whitespace-nowrap"
           >
+            <i className="ri-quill-pen-line text-base" />
             Hacer un encargo
-            <i className="ri-arrow-right-line" />
-          </a>
+          </button>
         </div>
       </div>
     </section>

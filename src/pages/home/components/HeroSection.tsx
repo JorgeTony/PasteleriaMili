@@ -1,55 +1,76 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
-const slides = [
-  {
-    image: 'https://readdy.ai/api/search-image?query=luxurious%20bakery%20interior%20with%20beautiful%20cakes%20and%20pastries%20on%20display%20warm%20golden%20light%20elegant%20french%20patisserie%20atmosphere%20cream%20and%20warm%20tones%20rich%20detail&width=1600&height=900&seq=hero1&orientation=landscape',
-    tagline: 'Artesanal & Auténtico',
-    title: 'El arte de\nendulzar\ntu mundo',
-    subtitle: 'Pasteles, panes y postres creados con amor y los mejores ingredientes',
-  },
-  {
-    image: 'https://readdy.ai/api/search-image?query=beautiful%20assortment%20of%20fresh%20baked%20breads%20sourdough%20baguettes%20focaccia%20in%20warm%20golden%20light%20rustic%20wood%20bakery%20counter%20cream%20beige%20warm%20tones&width=1600&height=900&seq=hero2&orientation=landscape',
-    tagline: 'Horneado cada mañana',
-    title: 'Panes\nartesanales\nfrescos',
-    subtitle: 'Masa madre de 48 horas, harinas seleccionadas y técnicas tradicionales',
-  },
-  {
-    image: 'https://readdy.ai/api/search-image?query=stunning%20collection%20of%20french%20pastries%20macarons%20eclairs%20tarts%20on%20elegant%20marble%20surface%20soft%20natural%20light%20luxury%20patisserie%20cream%20white%20background%20beautiful&width=1600&height=900&seq=hero3&orientation=landscape',
-    tagline: 'Postres de autor',
-    title: 'Repostería\nfina para\ncada momento',
-    subtitle: 'Inspiración francesa con ingredientes locales de primera calidad',
-  },
-];
+interface HeroSlide {
+  id: number;
+  image: string;
+  tagline: string;
+  title: string;
+  subtitle: string;
+  active: boolean;
+  sort_order: number;
+}
 
 export default function HeroSection() {
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
+    async function fetchSlides() {
+      const { data, error } = await supabase
+        .from('hero_slides')
+        .select('*')
+        .eq('active', true)
+        .order('sort_order', { ascending: true });
+
+      if (error) {
+        console.error('Error cargando hero slides:', error);
+        return;
+      }
+
+      setSlides(data || []);
+    }
+
+    fetchSlides();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length === 0) return;
+
     const timer = setInterval(() => {
       setAnimating(true);
+
       setTimeout(() => {
         setCurrent(p => (p + 1) % slides.length);
         setAnimating(false);
       }, 400);
     }, 5000);
+
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const goTo = (index: number) => {
     if (index === current) return;
+
     setAnimating(true);
+
     setTimeout(() => {
       setCurrent(index);
       setAnimating(false);
     }, 300);
   };
 
+  if (slides.length === 0) {
+    return (
+      <section id="inicio" className="relative w-full h-screen min-h-[600px] bg-stone-900" />
+    );
+  }
+
   const slide = slides[current];
 
   return (
     <section id="inicio" className="relative w-full h-screen min-h-[600px] overflow-hidden">
-      {/* Background */}
       <div className={`absolute inset-0 transition-opacity duration-500 ${animating ? 'opacity-0' : 'opacity-100'}`}>
         <img
           src={slide.image}
@@ -59,20 +80,22 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
       </div>
 
-      {/* Content */}
       <div className={`relative z-10 flex flex-col items-center justify-center h-full text-center px-6 transition-all duration-500 ${animating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
         <span className="text-amber-300 text-xs tracking-[0.3em] uppercase mb-4 font-medium">
           {slide.tagline}
         </span>
+
         <h1
           className="text-white text-5xl md:text-7xl font-bold leading-tight mb-6 whitespace-pre-line"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           {slide.title}
         </h1>
+
         <p className="text-white/75 text-base md:text-lg max-w-md mb-10 leading-relaxed">
           {slide.subtitle}
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4 items-center">
           <a
             href="#productos"
@@ -81,6 +104,7 @@ export default function HeroSection() {
             Ver productos
             <i className="ri-arrow-right-line" />
           </a>
+
           <a
             href="#galeria"
             className="text-white/90 hover:text-white text-sm font-medium flex items-center gap-2 cursor-pointer whitespace-nowrap border-b border-white/30 hover:border-white transition-all pb-0.5"
@@ -91,7 +115,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Slide indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
@@ -102,14 +125,6 @@ export default function HeroSection() {
             }`}
           />
         ))}
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 right-8 z-10 hidden md:flex flex-col items-center gap-2">
-        <div className="h-12 w-px bg-white/30 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1/2 bg-white animate-bounce" />
-        </div>
-        <span className="text-white/50 text-xs tracking-widest rotate-90 origin-center mt-2">scroll</span>
       </div>
     </section>
   );
