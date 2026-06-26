@@ -36,7 +36,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Lato', sans-serif" }}>
       <Navbar cartCount={cart.count} onCartOpen={() => cart.setIsOpen(true)} />
-
+      {/* actualización de UI */}
       <CartSidebar
         isOpen={cart.isOpen}
         onClose={() => cart.setIsOpen(false)}
