@@ -118,5 +118,4 @@ export default function FooterSection() {
     </footer>
   );
 }
-hola patrick
-hola omar
+
