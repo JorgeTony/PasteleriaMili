@@ -3,7 +3,6 @@ name: CI Pasteleria Mili
 on:
   push:
     branches: [main, develop]
-
   pull_request:
     branches: [main, develop]
 
@@ -19,12 +18,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Instalar dependencias
-        run: npm install
+        run: npm ci
 
-      - name: Compilar proyecto
-        run: npm run build
+      - name: Verificar Lint
+        run: npm run lint
 
       - name: Verificar TypeScript
         run: npm run type-check
+
+      - name: Ejecutar tests
+        run: npm test --if-present
+
+      - name: Construir proyecto
+        run: npm run build
