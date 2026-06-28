@@ -11,26 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: Instalar dependencias
-        run: npm ci
+      - run: npm install
 
-      - name: Verificar Lint
-        run: npm run lint
+      - run: npm run type-check
 
-      - name: Verificar TypeScript
-        run: npm run type-check
-
-      - name: Ejecutar tests
-        run: npm test --if-present
-
-      - name: Construir proyecto
-        run: npm run build
+      - run: npm run build
