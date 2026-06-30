@@ -50,10 +50,12 @@ export default defineConfig({
     }),
   ],
 
+  // 🔥 CLAVE PARA GITHUB PAGES
   base: "/PasteleriaMili/",
 
   build: {
     outDir: "dist",
+    emptyOutDir: true,
     sourcemap: false,
   },
 
