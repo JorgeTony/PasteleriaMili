@@ -26,20 +26,18 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 18
 
       - name: Instalar dependencias
         run: npm install
 
       - name: Compilar proyecto
         run: npm run build
-        env:
-          BASE_PATH: /PasteleriaMili/
 
       - name: Subir artifact de GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./dist
 
   deploy:
     environment:
