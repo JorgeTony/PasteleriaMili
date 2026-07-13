@@ -1,0 +1,19 @@
+services:
+
+  pasteleria-mili:
+
+    build:
+
+      context: .
+
+      args:
+
+        VITE_BASE_PATH: /
+
+    ports:
+
+      - "8080:80"
+
+    container_name: pasteleria-mili
+
+    restart: always
