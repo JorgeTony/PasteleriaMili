@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: pasteleria-mili
+    runtime: docker
+    plan: free
+    branch: feature/docker-cloud
+    dockerfilePath: ./Dockerfile
+
+    envVars:
+      - key: VITE_BASE_PATH
+        value: /
+
+      - key: VITE_PUBLIC_SUPABASE_URL
+        sync: false
+
+      - key: VITE_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
